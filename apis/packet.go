@@ -22,6 +22,7 @@ import (
 
 	portsv1alpha1 "github.com/packethost/crossplane-provider-packet/apis/ports/v1alpha1"
 	serverv1alpha2 "github.com/packethost/crossplane-provider-packet/apis/server/v1alpha2"
+	spotmarketv1alpha1 "github.com/packethost/crossplane-provider-packet/apis/spotmarket/v1alpha1"
 	packetv1alpha2 "github.com/packethost/crossplane-provider-packet/apis/v1alpha2"
 	vlanv1alpha1 "github.com/packethost/crossplane-provider-packet/apis/vlan/v1alpha1"
 )
@@ -32,6 +33,7 @@ func init() {
 		packetv1alpha2.SchemeBuilder.AddToScheme,
 		portsv1alpha1.SchemeBuilder.AddToScheme,
 		serverv1alpha2.SchemeBuilder.AddToScheme,
+		spotmarketv1alpha1.SchemeBuilder.AddToScheme,
 		vlanv1alpha1.SchemeBuilder.AddToScheme,
 	)
 }
