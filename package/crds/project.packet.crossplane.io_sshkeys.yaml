@@ -6,7 +6,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.3.0
   creationTimestamp: null
-  name: assignments.ports.packet.crossplane.io
+  name: sshkeys.project.packet.crossplane.io
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.conditions[?(@.type=='Ready')].status
@@ -24,22 +24,22 @@ spec:
   - JSONPath: .metadata.creationTimestamp
     name: AGE
     type: date
-  group: ports.packet.crossplane.io
+  group: project.packet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - packet
-    kind: Assignment
-    listKind: AssignmentList
-    plural: assignments
-    singular: assignment
+    kind: SSHKey
+    listKind: SSHKeyList
+    plural: sshkeys
+    singular: sshkey
   scope: Cluster
   subresources:
     status: {}
   validation:
     openAPIV3Schema:
-      description: Assignment is a managed resource that represents an Equinix Metal Assignment
+      description: SSHKey is a managed resource that represents a Equinix Metal Project SSH key
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
@@ -50,7 +50,7 @@ spec:
         metadata:
           type: object
         spec:
-          description: AssignmentSpec defines the desired state of Assignment
+          description: SSHKeySpec defines the desired state of SSHKey
           properties:
             deletionPolicy:
               description: DeletionPolicy specifies what will happen to the underlying external when this managed resource is deleted - either "Delete" or "Orphan" the external resource. The "Delete" policy is the default when no policy is specified.
@@ -59,11 +59,17 @@ spec:
               - Delete
               type: string
             forProvider:
-              description: "AssignmentParameters define the desired state of an Equinix Metal Virtual Network. https://metal.equinix.com/developers/api/vlans/#create-an-virtual-network \n Reference values are used for optional parameters to determine if LateInitialization should update the parameter after creation."
+              description: "SSHKeyParameters define the desired state of an Equinix Metal Virtual Network. https://metal.equinix.com/developers/api/sshkeys/#create-a-ssh-key-for-the-given-project \n Reference values are used for optional parameters to determine if LateInitialization should update the parameter after creation."
               properties:
-                deviceId:
+                key:
+                  description: 'Key is the public SSH key (example: "ssh-rsa AAAA... user@host")'
                   type: string
-                deviceIdRef:
+                label:
+                  description: Label is a display name for the SSH key
+                  type: string
+                projectId:
+                  type: string
+                projectIdRef:
                   description: A Reference to a named object.
                   properties:
                     name:
@@ -72,32 +78,7 @@ spec:
                   required:
                   - name
                   type: object
-                deviceIdSelector:
-                  description: A Selector selects an object.
-                  properties:
-                    matchControllerRef:
-                      description: MatchControllerRef ensures an object with the same controller reference as the selecting object is selected.
-                      type: boolean
-                    matchLabels:
-                      additionalProperties:
-                        type: string
-                      description: MatchLabels ensures an object with matching labels is selected.
-                      type: object
-                  type: object
-                name:
-                  type: string
-                virtualNetworkId:
-                  type: string
-                virtualNetworkIdRef:
-                  description: A Reference to a named object.
-                  properties:
-                    name:
-                      description: Name of the referenced object.
-                      type: string
-                  required:
-                  - name
-                  type: object
-                virtualNetworkIdSelector:
+                projectIdSelector:
                   description: A Selector selects an object.
                   properties:
                     matchControllerRef:
@@ -110,7 +91,7 @@ spec:
                       type: object
                   type: object
               required:
-              - name
+              - key
               type: object
             providerConfigRef:
               description: ProviderConfigReference specifies how the provider that will be used to create, observe, update, and delete this managed resource should be configured.
@@ -147,8 +128,37 @@ spec:
           - forProvider
           type: object
         status:
-          description: AssignmentStatus defines the observed state of Assignment
+          description: SSHKeyStatus defines the observed state of SSHKey
           properties:
+            atProvider:
+              description: SSHKeyObservation is used to reflect in the Kubernetes API, the observed state of the ProjectSSHKey resource from the Equinix Metal API. https://metal.equinix.com/developers/api/sshkeys/#retrieve-a-devices-ssh-keys
+              properties:
+                createdAt:
+                  description: CreatedAt is the time the SSH key was created
+                  format: date-time
+                  type: string
+                fingerprint:
+                  description: Fingerprint is the SSH public key fingerprint
+                  type: string
+                href:
+                  description: Href is the canonical Equinix Metal API URL reference for this resource
+                  type: string
+                id:
+                  description: ID is the SSH key identifier in the Equinix Metal API
+                  type: string
+                key:
+                  description: 'Key is the public SSH key (example: "ssh-rsa AAAA... user@host")'
+                  type: string
+                label:
+                  description: Label is a display name for the SSH key
+                  type: string
+                updatedAt:
+                  description: UpdatedAt is the time the SSH key or label was last updated
+                  format: date-time
+                  type: string
+              required:
+              - id
+              type: object
             conditions:
               description: Conditions of the resource.
               items:

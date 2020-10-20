@@ -21,6 +21,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 
 	portsv1alpha1 "github.com/packethost/crossplane-provider-equinix-metal/apis/ports/v1alpha1"
+	projectv1alpha1 "github.com/packethost/crossplane-provider-equinix-metal/apis/project/v1alpha1"
 	serverv1alpha2 "github.com/packethost/crossplane-provider-equinix-metal/apis/server/v1alpha2"
 	packetv1beta1 "github.com/packethost/crossplane-provider-equinix-metal/apis/v1beta1"
 	vlanv1alpha1 "github.com/packethost/crossplane-provider-equinix-metal/apis/vlan/v1alpha1"
@@ -31,6 +32,7 @@ func init() {
 	AddToSchemes = append(AddToSchemes,
 		packetv1beta1.SchemeBuilder.AddToScheme,
 		portsv1alpha1.SchemeBuilder.AddToScheme,
+		projectv1alpha1.SchemaBuilder.AddToScheme,
 		serverv1alpha2.SchemeBuilder.AddToScheme,
 		vlanv1alpha1.SchemeBuilder.AddToScheme,
 	)
