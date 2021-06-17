@@ -1,6 +1,9 @@
 name: Install Provider
 
-on: pull_request
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   install-provider:
